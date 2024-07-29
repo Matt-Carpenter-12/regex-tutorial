@@ -156,17 +156,199 @@ Matches the regular expression at the exact position in the string where it was 
 Example: /hello/y will match "hello" only if it is found exactly at the current position in the string.
 
 ### Grouping and Capturing
+Grouping and capturing in regular expressions allow you to treat multiple characters as a single unit and extract parts of the matched text. Here are key concepts and examples:
+
+Grouping
+Basic Grouping:
+
+Parentheses () are used to group part of a regex pattern.
+Example: (abc) matches the exact sequence "abc".
+Non-Capturing Groups:
+
+Use (?:...) to group without capturing.
+Example: (?:abc) matches "abc" but does not capture it for back-references.
+Capturing
+Capturing Groups:
+
+Parentheses () not only group but also capture the matched text for use later.
+Example: (abc) captures "abc" for back-references.
+Back-References:
+
+Refer to captured groups using \1, \2, etc., where the number corresponds to the position of the capturing group.
+Example: (\w)\1 matches any character followed by itself, like "aa" or "bb".
+Named Capturing Groups:
+
+Use (?<name>...) to create a named capturing group.
+Example: (?<digit>\d) captures a digit and names it "digit". You can reference it later with \k<name>.
 
 ### Bracket Expressions
+Bracket expressions, also known as character classes, are used in regular expressions to specify a set of characters to match. They are enclosed within square brackets [ ] and can include individual characters, ranges, and combinations. Here are the key concepts and examples:
+
+Basic Usage
+Individual Characters:
+
+[abc]: Matches any one of the characters 'a', 'b', or 'c'.
+Character Ranges:
+
+[a-z]: Matches any lowercase letter from 'a' to 'z'.
+[A-Z]: Matches any uppercase letter from 'A' to 'Z'.
+[0-9]: Matches any digit from '0' to '9'.
+Negation
+Negated Character Classes:
+[^abc]: Matches any character except 'a', 'b', or 'c'.
+[^0-9]: Matches any character that is not a digit.
+Combining Character Classes
+Multiple Ranges and Characters:
+[a-zA-Z0-9]: Matches any uppercase or lowercase letter or digit.
+[aeiou0-9]: Matches any vowel or digit.
+Special Characters Inside Brackets
+Literal Hyphen:
+
+To include a hyphen -, place it at the beginning or end of the character class or escape it with a backslash.
+Example: [-a-z] or [a-z-] or [a\-z] matches a hyphen or any lowercase letter.
+Literal Brackets and Backslashes:
+
+To include a literal closing bracket ], place it at the beginning or escape it with a backslash.
+Example: []a-z] or [a\-z] matches ']' or any lowercase letter.
+To include a backslash, escape it with another backslash \\.
+Example: [\\] matches a backslash.
 
 ### Greedy and Lazy Match
 
+In regular expressions, quantifiers can be greedy or lazy, determining how much text they match. Understanding the difference between greedy and lazy matching helps in controlling the behavior of your regex patterns.
+
+Greedy Matching
+Greedy quantifiers match as much text as possible. They try to match the longest possible string that satisfies the regex.
+
+Common Greedy Quantifiers
+* (zero or more times):
+
+Example: a* matches "a", "aa", "aaa", and so on.
+Pattern: a.*b
+Text: "acb aabc aaab"
+Match: "acb aabc aaab" (matches the entire string)
++ (one or more times):
+
+Example: a+ matches "a", "aa", "aaa", and so on.
+Pattern: a.+b
+Text: "acb aabc aaab"
+Match: "acb aabc aaab" (matches the entire string)
+? (zero or one time):
+
+Example: a? matches "" (empty string) or "a".
+Pattern: a.?b
+Text: "acb aabc aaab"
+Match: "acb" (matches up to the first "b")
+{n,m} (between n and m times):
+
+Example: a{2,4} matches "aa", "aaa", or "aaaa".
+Pattern: a.{2,4}b
+Text: "acb aabc aaab"
+Match: "aabc" (matches "aabc" in the text)
+Lazy Matching
+Lazy quantifiers match as little text as possible. They try to match the shortest possible string that satisfies the regex.
+
+Common Lazy Quantifiers
+*? (zero or more times):
+
+Example: a*? matches "", "a", "aa", "aaa", and so on.
+Pattern: a.*?b
+Text: "acb aabc aaab"
+Match: "acb" (matches up to the first "b")
++? (one or more times):
+
+Example: a+? matches "a", "aa", "aaa", and so on.
+Pattern: a.+?b
+Text: "acb aabc aaab"
+Match: "acb" (matches up to the first "b")
+?? (zero or one time):
+
+Example: a?? matches "" (empty string) or "a".
+Pattern: a.??b
+Text: "acb aabc aaab"
+Match: "acb" (matches up to the first "b")
+{n,m}? (between n and m times):
+
+Example: a{2,4}? matches "aa", "aaa", or "aaaa".
+Pattern: a.{2,4}?b
+Text: "acb aabc aaab"
+Match: "aabc" (matches "aabc" in the text)
+
+
 ### Boundaries
+Boundaries in regular expressions are special constructs that allow you to specify positions within a string rather than matching specific characters. They help in defining where a pattern should match in the text. Here are the main types of boundaries:
+
+Word Boundaries
+Word Boundary (\b):
+
+Matches the position between a word character (alphanumeric or underscore) and a non-word character.
+Example: \bword\b matches "word" in "word boundary" but not in "swordfish".
+Pattern: \bhello\b
+Text: "hello there" or "say hello"
+Match: "hello" (matches "hello" as a whole word)
+Non-Word Boundary (\B):
+
+Matches the position where there is no word boundary.
+Example: \Bword\B matches "word" in "swordfish" but not in "word boundary".
+Pattern: \Bword\B
+Text: "swordfish" or "password"
+Match: "word" (matches "word" within a larger word)
+Line Boundaries
+Start of Line (^):
+
+Matches the position at the beginning of a line.
+Example: ^hello matches "hello" only if it is at the start of a line.
+Pattern: ^start
+Text: "start the day" or "restart"
+Match: "start" (matches "start" at the beginning of the line)
+End of Line ($):
+
+Matches the position at the end of a line.
+Example: world$ matches "world" only if it is at the end of a line.
+Pattern: end$
+Text: "the end" or "ending"
+Match: "end" (matches "end" at the end of the line)
 
 ### Back-references
+Back-references in regular expressions allow you to refer to previously captured groups within the same pattern. They are useful for matching repeated or mirrored patterns within a string. Here are the key concepts and examples:
+
+Basic Syntax
+Basic Back-Reference:
+
+\1, \2, etc., refer to the first, second, etc., capturing groups.
+Example: (abc)\1 matches "abcabc".
+Named Back-Reference:
+
+\k<name> refers to a named capturing group.
+Example: (?<word>\w+)\s+\k<word> matches a repeated word separated by spaces.
 
 ### Look-ahead and Look-behind
+Look-ahead and look-behind are types of zero-width assertions in regular expressions that allow you to match a pattern only if it is (or isn't) followed or preceded by another pattern. They don't consume characters in the string but assert whether a match is possible or not based on the surrounding text.
+
+Look-ahead
+Look-ahead assertions check for a pattern ahead of the current position in the string without including it in the match.
+
+Positive Look-ahead ((?=...)):
+
+Asserts that what follows the current position matches the pattern inside the parentheses.
+Example: foo(?=bar) matches "foo" only if it is followed by "bar".
+Negative Look-ahead ((?!...)):
+
+Asserts that what follows the current position does not match the pattern inside the parentheses.
+Example: foo(?!bar) matches "foo" only if it is not followed by "bar".
+Look-behind
+Look-behind assertions check for a pattern behind the current position in the string without including it in the match.
+
+Positive Look-behind ((?<=...)):
+
+Asserts that what precedes the current position matches the pattern inside the parentheses.
+Example: (?<=foo)bar matches "bar" only if it is preceded by "foo".
+Negative Look-behind ((?<!...)):
+
+Asserts that what precedes the current position does not match the pattern inside the parentheses.
+Example: (?<!foo)bar matches "bar" only if it is not preceded by "foo".
 
 ## Author
 
-A short section about the author with a link to the author's GitHub profile (replace with your information and a link to your profile)
+Florida-based developer who is currently in the process of sharpening his developmental skills and future hopes of finding a job with them in the street or starting his own LLC for web development.
+https://github.com/Matt-Carpenter-12
